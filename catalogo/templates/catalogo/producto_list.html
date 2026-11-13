@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Catálogo · InvenShop{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Catálogo</h1>
+
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-5">
+    <input type="text" name="q" class="form-control"
+           placeholder="Buscar por nombre o descripción"
+           value="{{ request.GET.q }}">
+  </div>
+  <div class="col-md-3">
+    <select name="categoria" class="form-select">
+      <option value="">Todas las categorías</option>
+      {% for c in categorias %}
+        <option value="{{ c.slug }}"
+                {% if request.GET.categoria == c.slug %}selected{% endif %}>
+          {{ c.nombre }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select name="orden" class="form-select">
+      <option value="nombre" {% if request.GET.orden == "nombre" %}selected{% endif %}>Nombre</option>
+      <option value="precio" {% if request.GET.orden == "precio" %}selected{% endif %}>Precio Asc.</option>
+      <option value="-precio" {% if request.GET.orden == "-precio" %}selected{% endif %}>Precio Desc.</option>
+    </select>
+  </div>
+  <div class="col-md-2 d-grid">
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+  </div>
+</form>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+  {% for p in productos %}
+  <div class="col">
+    <div class="card h-100">
+      {% if p.imagen %}
+        <img src="{{ p.imagen.url }}" class="card-img-top object-fit-cover"
+             style="height: 200px;" alt="{{ p.nombre }}">
+      {% endif %}
+      <div class="card-body">
+        <span class="badge text-bg-light">{{ p.categoria.nombre }}</span>
+        <h5 class="card-title mt-2">{{ p.nombre }}</h5>
+        <p class="card-text fw-bold">${{ p.precio }}</p>
+        {% if p.agotado %}
+          <span class="badge text-bg-secondary">Agotado</span>
+        {% endif %}
+      </div>
+      <div class="card-footer bg-transparent border-0">
+        <a href="{% url 'catalogo:detalle' p.pk %}" class="btn btn-outline-primary btn-sm w-100">Ver detalle</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">No se encontraron productos.</p>
+  {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav class="mt-4">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link"
+           href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a>
+      </li>
+    {% endif %}
+    <li class="page-item disabled">
+      <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    </li>
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link"
+           href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión · InvenShop{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4">
+    <h1 class="h3 mb-4">Iniciar sesión</h1>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {% include "partials/form_campos.html" %}
+      <button type="submit" class="btn btn-primary w-100">Entrar</button>
+    </form>
+    <p class="mt-3 text-center">¿No tenés cuenta? <a href="{% url 'usuarios:registro' %}">Registrate</a></p>
+  </div>
+</div>
+{% endblock %}

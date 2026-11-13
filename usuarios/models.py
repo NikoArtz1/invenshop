@@ -34,3 +34,7 @@ class Usuario(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
     objects = UsuarioManager()
+
+    @property
+    def es_personal(self):
+       return self.rol in (self.Rol.ADMIN, self.Rol.EMPLEADO)

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{% if user.es_personal %}Pedidos{% else %}Mis pedidos{% endif %} · InvenShop{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">{% if user.es_personal %}Pedidos{% else %}Mis pedidos{% endif %}</h1>
+
+{% if user.es_personal %}
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-4">
+    <select name="estado" class="form-select">
+      <option value="">Todos los estados</option>
+      {% for valor, etiqueta in estados %}
+        <option value="{{ valor }}" {% if estado_actual == valor %}selected{% endif %}>{{ etiqueta }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+  </div>
+</form>
+{% endif %}
+
+{% if pedidos %}
+<div class="table-responsive">
+  <table class="table align-middle">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Fecha</th>
+        {% if user.es_personal %}<th>Cliente</th>{% endif %}
+        <th>Estado</th>
+        <th class="text-end">Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in pedidos %}
+      <tr>
+        <td>{{ p.pk }}</td>
+        <td>{{ p.fecha_creacion|date:"d/m/Y H:i" }}</td>
+        {% if user.es_personal %}<td>{{ p.usuario.email }}</td>{% endif %}
+        <td>{% include "partials/estado_badge.html" with estado=p.estado etiqueta=p.get_estado_display %}</td>
+        <td class="text-end">${{ p.total }}</td>
+        <td class="text-end">
+          <a href="{% url 'pedidos:detalle' p.pk %}" class="btn btn-outline-primary btn-sm">Ver detalle</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if is_paginated %}
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if estado_actual %}estado={{ estado_actual }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a>
+      </li>
+    {% endif %}
+    <li class="page-item disabled">
+      <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    </li>
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if estado_actual %}estado={{ estado_actual }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="text-center py-5">
+  <p class="lead text-muted">No hay pedidos para mostrar.</p>
+  <a href="{% url 'catalogo:lista' %}" class="btn btn-primary">Ir al catálogo</a>
+</div>
+{% endif %}
+{% endblock %}

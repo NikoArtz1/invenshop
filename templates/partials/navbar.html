@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{% url 'catalogo:lista' %}">InvenShop</a>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+            aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="menuPrincipal">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'catalogo:lista' %}">Catálogo</a>
+        </li>
+
+        {% if user.is_authenticated and user.es_personal %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin:index' %}">Panel de gestión</a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        {% if user.is_authenticated %}
+          {% if user.rol == "CLIENTE" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'pedidos:historial' %}">
+                {% if user.es_personal %}Pedidos{% else %}Mis pedidos{% endif %}
+              </a>
+            </li>
+          {% if not user.is_authenticated or user.rol == "CLIENTE" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'pedidos:carrito' %}">
+                Carrito
+                {% if carrito_cantidad %}
+                  <span class="badge text-bg-warning">{{ carrito_cantidad }}</span>
+                {% endif %}
+              </a>
+            </li>
+            {% endif %}
+          {% endif %}
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.first_name|default:user.email }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'usuarios:perfil' %}">Mi perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form method="post" action="{% url 'usuarios:logout' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light btn-sm ms-lg-2" href="{% url 'usuarios:registro' %}">Registrarse</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

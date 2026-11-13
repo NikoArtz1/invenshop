@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Confirmar pedido · InvenShop{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Confirmá tu pedido</h1>
+<div class="row g-4">
+  <div class="col-md-7">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2 class="h5">Productos</h2>
+        {% include "partials/resumen_carrito.html" %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2 class="h5">Envío</h2>
+        <p class="mb-1">{{ envio.direccion }}</p>
+        <p class="mb-1">{{ envio.ciudad }} ({{ envio.codigo_postal }})</p>
+        <p class="mb-2">Tel.: {{ envio.telefono_contacto }}</p>
+        <a href="{% url 'pedidos:checkout' %}">Modificar datos</a>
+      </div>
+    </div>
+
+    {% if hay_problemas %}
+      <div class="alert alert-danger">
+        Algún producto ya no tiene stock suficiente.
+        <a href="{% url 'pedidos:carrito' %}">Ajustá el carrito</a> para continuar.
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-success w-100"
+              {% if hay_problemas %}disabled{% endif %}>Confirmar pedido</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ producto.nombre }} · InvenShop{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'catalogo:lista' %}">Catálogo</a></li>
+    <li class="breadcrumb-item">
+      <a href="{% url 'catalogo:lista' %}?categoria={{ producto.categoria.slug }}">{{ producto.categoria.nombre }}</a>
+    </li>
+    <li class="breadcrumb-item active">{{ producto.nombre }}</li>
+  </ol>
+</nav>
+
+<div class="row g-4">
+  <div class="col-md-5">
+    {% if producto.imagen %}
+      <img src="{{ producto.imagen.url }}" class="img-fluid rounded" alt="{{ producto.nombre }}">
+    {% else %}
+      <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted"
+           style="height: 300px;">Sin imagen</div>
+    {% endif %}
+  </div>
+
+  <div class="col-md-7">
+    <h1>{{ producto.nombre }}</h1>
+    <span class="badge text-bg-light">{{ producto.categoria.nombre }}</span>
+    <p class="fs-3 fw-bold mt-3">${{ producto.precio }}</p>
+    <p>{{ producto.descripcion|linebreaksbr }}</p>
+
+    {% if producto.agotado %}
+      <p class="text-danger fw-bold">Agotado</p>
+    {% else %}
+      <p class="text-muted">Stock disponible: {{ producto.stock }}</p>
+    {% endif %}
+
+    {# El action se completa cuando armemos el carrito #}
+    <form method="post" action="{% url 'pedidos:agregar' producto.pk %}" class="row g-2 align-items-center">
+      {% csrf_token %}
+      <div class="col-auto">
+        <input type="number" name="cantidad" value="1" min="1" max="{{ producto.stock }}"
+               class="form-control" style="width: 100px;"
+               {% if producto.agotado %}disabled{% endif %}>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary"
+                {% if producto.agotado %}disabled{% endif %}>Agregar al carrito</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

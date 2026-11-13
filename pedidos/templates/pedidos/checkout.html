@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Datos de envío · InvenShop{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Finalizar compra</h1>
+<div class="row g-4">
+  <div class="col-md-7">
+    <h2 class="h5">Datos de envío</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% include "partials/form_campos.html" %}
+      <button type="submit" class="btn btn-primary">Continuar</button>
+      <a href="{% url 'pedidos:carrito' %}" class="btn btn-link">Volver al carrito</a>
+    </form>
+  </div>
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h5">Resumen</h2>
+        {% include "partials/resumen_carrito.html" %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

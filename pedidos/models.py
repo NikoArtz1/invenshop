@@ -30,7 +30,18 @@ class Pedido(models.Model):
     
     class Meta:
         ordering = ["-fecha_creacion"]
-        
+
+    TRANSICIONES = {
+        Estado.PENDIENTE: [Estado.PAGADO, Estado.CANCELADO],
+        Estado.PAGADO: [Estado.ENVIADO, Estado.CANCELADO],
+        Estado.ENVIADO: [],
+        Estado.CANCELADO: [],
+    }
+
+    def estados_siguientes(self):
+        #Devuelve los estados a los que puede pasar
+        return [(e.value, e.label) for e in self.TRANSICIONES.get(self.estado, [])]
+    
     def __str__(self):
         return f"Pedido #{self.pk} - {self.usuario}"
     
