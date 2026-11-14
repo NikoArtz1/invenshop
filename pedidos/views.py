@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -178,6 +178,8 @@ class PedidoListView(LoginRequiredMixin, ListView):
 
 
 class CambiarEstadoView(PersonalRequeridoMixin, View):
+    permission_required = "pedidos.change_pedido"
+    
     def post(self, request, pk):
         pedido = get_object_or_404(Pedido, pk=pk)
         nuevo = request.POST.get("estado", "")

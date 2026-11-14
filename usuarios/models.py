@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
 from django.db import models
 
 class UsuarioManager(BaseUserManager):
@@ -38,3 +38,19 @@ class Usuario(AbstractUser):
     @property
     def es_personal(self):
        return self.rol in (self.Rol.ADMIN, self.Rol.EMPLEADO)
+
+    def save(self, *args, **kwargs):
+        self.is_staff = self.rol in (self.Rol.ADMIN, self.Rol.EMPLEADO)
+        self.is_superuser = self.rol == self.Rol.ADMIN
+        super().save(*args, **kwargs)
+        if kwargs.get("update_fields") is None:
+            self._sincronizar_grupo()
+    
+    def _sincronizar_grupo(self):
+        grupo = Group.objects.filter(name="Empleado").first()
+        if grupo is None:
+            return
+        if self.rol == self.Rol.EMPLEADO:
+            self.groups.add(grupo)
+        else:
+            self.groups.remove(grupo)
