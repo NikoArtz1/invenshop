@@ -1,17 +1,20 @@
 # InvenShop
 
-Sistema de gestión de inventario con comercio electrónico, desarrollado con Django.
-Programación IV · ITSE · 2026
+Programación IV - ITSE - 2026
 
 ## Integrantes
-- (completar)
+- Bravo Gabriel Martin
+- Exequiel Montoya Fernando
+- Ledesma Moyano Tomas
+- Fabrizio Emanuel Rojas
+- Ferreyra Alejandro Bruno
 
 ## Instalación
 ```bash
 git clone <url-del-repositorio>
 cd invenshop
 python -m venv venv
-venv\Scripts\activate          # Linux/macOS: source venv/bin/activate
+venv\Scripts\activate
 pip install -r requirements.txt
 ```
 

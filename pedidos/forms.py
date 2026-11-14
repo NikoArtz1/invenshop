@@ -15,7 +15,7 @@ class EnvioForm(BootstrapMixin, forms.ModelForm):
             "telefono_contacto": "Teléfono de contacto",
         }
 
-    #Usamos expresiones regulares para que el texto coincida con lo que se pide
+    # Usamos expresiones regulares para que el texto coincida con lo que se pide
     def clean_direccion(self):
         direccion = self.cleaned_data["direccion"].strip()
         if len(direccion) < 5:

@@ -72,7 +72,7 @@ class VaciarView(View):
 
 
 class CarritoNoVacioMixin:
-    """Si el carrito está vacío, manda de vuelta al carrito."""
+    # Si el carrito está vacio, manda de vuelta al carrito
     def dispatch(self, request, *args, **kwargs):
         if not Carrito(request):
             messages.warning(request, "Tu carrito está vacío.")

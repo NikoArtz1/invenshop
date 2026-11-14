@@ -49,7 +49,7 @@ class Carrito:
             lineas = []
             for pid in list(self.items):
                 producto = por_id.get(int(pid))
-                if producto is None:            # borrado o desactivado desde que se agregó
+                if producto is None:
                     del self.items[pid]
                     self._guardar()
                     continue
