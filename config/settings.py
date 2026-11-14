@@ -147,3 +147,7 @@ MESSAGE_TAGS = {
 }
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+LOGIN_URL = "usuarios:login"
+LOGIN_REDIRECT_URL = "catalogo:lista"
+LOGOUT_REDIRECT_URL = "catalogo:lista"

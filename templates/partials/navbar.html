@@ -22,24 +22,23 @@
       </ul>
 
       <ul class="navbar-nav ms-auto align-items-lg-center">
-        {% if user.is_authenticated %}
-          {% if user.rol == "CLIENTE" %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'pedidos:historial' %}">
-                {% if user.es_personal %}Pedidos{% else %}Mis pedidos{% endif %}
-              </a>
-            </li>
-          {% if not user.is_authenticated or user.rol == "CLIENTE" %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'pedidos:carrito' %}">
-                Carrito
-                {% if carrito_cantidad %}
-                  <span class="badge text-bg-warning">{{ carrito_cantidad }}</span>
-                {% endif %}
-              </a>
-            </li>
+        {% if not user.is_authenticated or user.rol == "CLIENTE" %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'pedidos:carrito' %}">
+            Carrito
+            {% if carrito_cantidad %}
+              <span class="badge text-bg-warning">{{ carrito_cantidad }}</span>
             {% endif %}
-          {% endif %}
+          </a>
+        </li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'pedidos:historial' %}">
+              {% if user.es_personal %}Pedidos{% else %}Mis pedidos{% endif %}
+            </a>
+          </li>
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button"
