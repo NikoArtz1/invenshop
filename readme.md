@@ -8,6 +8,7 @@ Programación IV - ITSE - 2026
 - Ledesma Moyano Tomas
 - Fabrizio Emanuel Rojas
 - Ferreyra Alejandro Bruno
+- Elba Maria Juan Cruz
 
 ## Instalación
 ```bash
