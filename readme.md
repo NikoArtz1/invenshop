@@ -6,8 +6,6 @@ Programación IV - ITSE - 2026
 - Bravo Gabriel Martin
 - Exequiel Montoya Fernando
 - Ledesma Moyano Tomas
-- Fabrizio Emanuel Rojas
-- Ferreyra Alejandro Bruno
 - Elba Maria Juan Cruz
 
 ## Instalación
