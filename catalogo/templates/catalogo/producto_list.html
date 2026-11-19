@@ -74,8 +74,11 @@
     </li>
     {% if page_obj.has_next %}
       <li class="page-item">
-        <a class="page-link"
-           href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente</a>
+        <!-- Esto añade "page={numero}" a la URL-->
+        <a class="page-link" 
+        href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">
+          Siguiente
+        </a>
       </li>
     {% endif %}
   </ul>

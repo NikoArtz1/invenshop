@@ -27,7 +27,7 @@ class ProductoListView(ListView):
         if orden not in ("nombre", "precio", "-precio"):
             orden = "nombre"
 
-        return qs.order_by(orden) 
+        return qs.order_by(orden)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
